@@ -7,16 +7,13 @@
 
 package org.rsna.util;
 
-import java.io.*;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.SecureRandom;
-import java.util.Properties;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
 /**
@@ -82,11 +79,12 @@ public class HttpUtil {
 		conn.setDoInput(true);
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-Type", "application/x-mirc");
-
+		
 		//If the proxy is enabled and proxy authentication
 		//credentials are available, set them in the request.
 		ProxyServer proxy = ProxyServer.getInstance();
 		if ((proxy != null) && proxy.authenticate()) {
+			proxy.initAuthenticator();
 			conn.setRequestProperty(
 				"Proxy-Authorization",
 				"Basic "+proxy.getEncodedCredentials());
